@@ -12,7 +12,7 @@ import os
 
 conn = sqlite3.connect('usersdatabase.db')
 c = conn.cursor()
-fname = "model/trainingData.yml"
+fname = "model/trainingDataLBPH.yml"
  
 if not os.path.isfile(fname):
   print("Por favor, treine o reconhecedor primeiro!")
@@ -32,7 +32,7 @@ while True:
   _,img = cap.read()
   gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
   equalize_image = clahe.apply(gray)
-  faces = face_cascade.detectMultiScale(equalize_image, 1.1, 5)
+  faces = face_cascade.detectMultiScale(equalize_image, 1.1, 4)
 
   for (x,y,w,h) in faces:
     cv2.rectangle(img,(x,y),(x+w,y+h),(255,255,255),2)

@@ -2,7 +2,7 @@
 # ------------------------------ By Mr-maike ----------------------------------------------------- #
 import cv2
 import numpy as np
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 import sqlite3
 import os
 
@@ -18,7 +18,7 @@ if not os.path.isfile(fname):
   print("Por favor, treine o reconhecedor primeiro!")
   exit(0)
 
-face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+face_cascade = cv2.CascadeClassifier('Haar/haarcascade_frontalface_default.xml')
 cap = cv2.VideoCapture(0)
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 recognizer.read(fname)
@@ -27,7 +27,7 @@ while True:
 
   _,img = cap.read()
   gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-  faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+  faces = face_cascade.detectMultiScale(gray, 1.1, 5)
   for (x,y,w,h) in faces:
     cv2.rectangle(img,(x,y),(x+w,y+h),(255,255,255),2)
     ids,conf = recognizer.predict(gray[y:y+h,x:x+w])
@@ -37,6 +37,7 @@ while True:
 
     if conf < 50:
       cv2.putText(img, name, (x+2,y+h-5), cv2.FONT_HERSHEY_SIMPLEX, 1, (150,255,0),2)
+      cv2.putText(img, str(conf), (x,y + (h+30)), cv2.FONT_HERSHEY_SIMPLEX, 1, (150,255,0), 2)
       print('[SISTEMA] Seja bem-vindo ' + str(name))
       #GPIO.output(18, GPIO.HIGH)
       

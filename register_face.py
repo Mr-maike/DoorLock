@@ -14,7 +14,7 @@ if not os.path.exists('./dataset'):
 # load cascade classifier file
 face_cascade = cv2.CascadeClassifier('Haar/haarcascade_frontalface_default.xml')
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 u_name = input("Informe o seu nome: ")
 c.execute('INSERT INTO users (name) VALUES (?)', (u_name,))
 uid = c.lastrowid
@@ -23,15 +23,16 @@ sampleNum = 0
 while True:
   _,img = cap.read()
   gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-  faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+  faces = face_cascade.detectMultiScale(gray, 1.1, 5)
 
   for (x,y,w,h) in faces:
 
     if cv2.waitKey(1) & 0xFF== ord('q'):
-      #print('Teste')
+      
       sampleNum = sampleNum+1
       print('[SISTEMA] Foto ' + str(sampleNum) + ' Capturada com sucesso!')
-      cv2.imwrite("dataset/User."+str(uid)+"."+str(sampleNum)+".jpg",gray[y:y+h,x:x+w])
+      faceImg = cv2.resize(gray[y:y + h, x:x + w], (220,220))
+      cv2.imwrite("dataset/User."+str(uid)+"."+str(sampleNum)+".jpg", faceImg)
     cv2.rectangle(img, (x,y), (x+w, y+h), (255,0,0), 2)
     #cv2.waitKey(100)
 

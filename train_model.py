@@ -31,11 +31,11 @@ Ids, faces = getImagesWithID(path)
 print('[SISTEMA] Treinando...')
 recognizerEigenfaces.train(faces, Ids)
 print('[SISTEMA] Arquivo Eigenface treinado com sucesso! ') 
-recognizerEigenfaces.save('model/trainingDataEigenface.xml')
+recognizerEigenfaces.save('model/trainingDataEigenface.yml')
 
 recognizerLBPH.train(faces, Ids)
 print('[SISTEMA] Arquivo  LBPH treinado com sucesso! ')
-recognizerLBPH.save('model/trainingDataLBPH.xml')
+recognizerLBPH.save('model/trainingDataLBPH.yml')
 
 
 print('[SISTEMA] Todos os algoritmos foram criados com sucesso!')

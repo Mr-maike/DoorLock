@@ -19,7 +19,11 @@ if not os.path.isfile(fname):
   exit(0)
 
 face_cascade = cv2.CascadeClassifier('Haar/haarcascade_frontalface_default.xml')
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
+
+#cria um objeto CLAHE
+clahe = cv2.createCLAHE(clipLimit=2.5, tileGridSize=(8,8))
+
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 recognizer.read(fname)
 
@@ -27,7 +31,9 @@ while True:
 
   _,img = cap.read()
   gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-  faces = face_cascade.detectMultiScale(gray, 1.1, 5)
+  equalize_image = clahe.apply(gray)
+  faces = face_cascade.detectMultiScale(equalize_image, 1.1, 5)
+
   for (x,y,w,h) in faces:
     cv2.rectangle(img,(x,y),(x+w,y+h),(255,255,255),2)
     ids,conf = recognizer.predict(gray[y:y+h,x:x+w])

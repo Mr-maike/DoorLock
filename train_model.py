@@ -3,7 +3,10 @@ import cv2
 import numpy as np 
 from PIL import Image
 
-recognizer = cv2.face.LBPHFaceRecognizer_create(1, 8,8,8)
+recognizerEigenfaces = cv2.face.EigenFaceRecognizer_create()
+recognizerFisherFaces = cv2.face.FisherFaceRecognizer_create(2)
+recognizerLBPH = cv2.face.LBPHFaceRecognizer_create(1, 8,8,8)
+
 path = 'dataset'
 
 if not os.path.exists('./model'):
@@ -24,8 +27,16 @@ def getImagesWithID(path):
     cv2.waitKey(10)
   return np.array(IDs), faces
 Ids, faces = getImagesWithID(path)
-recognizer.train(faces,Ids)
-recognizer.save('model/trainingData.yml')
-print('[SISTEMA] Arquivos treinados com sucesso! ')
 
+print('[SISTEMA] Treinando...')
+recognizerEigenfaces.train(faces, Ids)
+print('[SISTEMA] Arquivo Eigenface treinado com sucesso! ') 
+recognizerEigenfaces.save('model/trainingDataEigenface.xml')
+
+recognizerLBPH.train(faces, Ids)
+print('[SISTEMA] Arquivo  LBPH treinado com sucesso! ')
+recognizerLBPH.save('model/trainingDataLBPH.xml')
+
+
+print('[SISTEMA] Todos os algoritmos foram criados com sucesso!')
 cv2.destroyAllWindows()

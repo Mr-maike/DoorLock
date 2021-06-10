@@ -23,36 +23,40 @@ sampleNum = 0
 while True:
   _,img = cap.read()
   gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-  faces = face_cascade.detectMultiScale(
-    gray,
-    scaleFactor= 1.1,
-    minNeighbors= 5,
-    minSize=(30, 30)
-)
 
-  for (x,y,w,h) in faces:
+  if np.average(gray) > 110:
+    faces = face_cascade.detectMultiScale(
+                                          gray,
+                                          scaleFactor= 1.1,
+                                          minNeighbors= 5,
+                                          minSize=(30, 30)
+                                          )
 
-    region = img[y:y + h, x:x + w]
-    regionGrayEye = cv2.cvtColor(region, cv2.COLOR_BGR2GRAY)
-    DetectedEye = eye_cascade.detectMultiScale(regionGrayEye)
+    for (x,y,w,h) in faces:
+      
+      #faceImage = gray[y - int(h / 2): y + int(h * 1.5), x - int(x /2): x + int(w * 1.5)]
+      cv2.putText(img, "Face detectada", (x+int((w/2)), y-5), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255))
+      region = img[y:y + h, x:x + w]
+      regionGrayEye = cv2.cvtColor(region, cv2.COLOR_BGR2GRAY)
+      DetectedEye = eye_cascade.detectMultiScale(regionGrayEye)
 
-    for (ex, ey, eh, ew) in DetectedEye:
+      for (ex, ey, eh, ew) in DetectedEye:
 
-      cv2.rectangle(region, (ex, ey), (ex + ew, ey + eh), (255,0,0), 2)
+        cv2.rectangle(region, (ex, ey), (ex + ew, ey + eh), (255,0,0), 2)
 
-      if cv2.waitKey(1) & 0xFF== ord('q'):
         sampleNum = sampleNum+1
         print('[SISTEMA] Foto ' + str(sampleNum) + ' Capturada com sucesso!')
         faceImg = cv2.resize(gray[y:y + h, x:x + w], (220,220))
         cv2.imwrite("dataset/User."+str(uid)+"."+str(sampleNum)+".jpg", faceImg)
 
-    cv2.rectangle(img, (x,y), (x+w, y+h), (255,0,0), 2)
+      cv2.rectangle(img, (x,y), (x+w, y+h), (255,0,0), 2)
 
   cv2.imshow('Registro de Imagens',img)
   cv2.waitKey(1)
 
-  if sampleNum > 25:
+  if sampleNum > 50:
     break
+
 
 cap.release()
 conn.commit()

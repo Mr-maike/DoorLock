@@ -18,6 +18,7 @@ def getImagesWithID(path):
   IDs = []
   for imagePath in imagePaths:
     faceImg = Image.open(imagePath).convert('L')
+    faceImg.resize((110,110))
     faceNp = np.array(faceImg,'uint8')
     ID = int(os.path.split(imagePath)[-1].split('.')[1])
     faces.append(faceNp)
@@ -33,10 +34,13 @@ recognizerEigenfaces.train(faces, Ids)
 print('[SISTEMA] Arquivo Eigenface treinado com sucesso! ') 
 recognizerEigenfaces.save('model/trainingDataEigenface.yml')
 
+recognizerFisherFaces.train(faces, Ids)
+print('[SISTEMA] Arquivo Fisherface treinado com sucesso! ')
+recognizerFisherFaces.write('model/trainingDataFisherFace.yml')
+
 recognizerLBPH.train(faces, Ids)
 print('[SISTEMA] Arquivo  LBPH treinado com sucesso! ')
 recognizerLBPH.save('model/trainingDataLBPH.yml')
-
 
 print('[SISTEMA] Todos os algoritmos foram criados com sucesso!')
 cv2.destroyAllWindows()

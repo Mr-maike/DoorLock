@@ -5,7 +5,7 @@ from PIL import Image
 
 recognizerEigenfaces = cv2.face.EigenFaceRecognizer_create()
 recognizerFisherFaces = cv2.face.FisherFaceRecognizer_create(2)
-recognizerLBPH = cv2.face.LBPHFaceRecognizer_create(1, 8,8,8)
+recognizerLBPH = cv2.face.LBPHFaceRecognizer_create(2, 2, 8, 8)
 
 path = 'dataset'
 
@@ -32,7 +32,7 @@ Ids, faces = getImagesWithID(path)
 print('[SISTEMA] Treinando...')
 recognizerEigenfaces.train(faces, Ids)
 print('[SISTEMA] Arquivo Eigenface treinado com sucesso! ') 
-recognizerEigenfaces.save('model/trainingDataEigenface.yml')
+recognizerEigenfaces.write('model/trainingDataEigenface.yml')
 
 recognizerFisherFaces.train(faces, Ids)
 print('[SISTEMA] Arquivo Fisherface treinado com sucesso! ')
@@ -40,7 +40,7 @@ recognizerFisherFaces.write('model/trainingDataFisherFace.yml')
 
 recognizerLBPH.train(faces, Ids)
 print('[SISTEMA] Arquivo  LBPH treinado com sucesso! ')
-recognizerLBPH.save('model/trainingDataLBPH.yml')
+recognizerLBPH.write('model/trainingDataLBPH.yml')
 
 print('[SISTEMA] Todos os algoritmos foram criados com sucesso!')
 cv2.destroyAllWindows()
